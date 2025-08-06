@@ -84,7 +84,6 @@ class TestBooksCollector:
         collector.add_book_in_favorites("Дубликат")
         collector.add_book_in_favorites("Дубликат")
         assert collector.get_list_of_favorites_books() == ["Дубликат"]
-
     def test_delete_book_from_favorites_success(self, collector):
         collector.add_new_book("Книга для удаления")
         collector.add_book_in_favorites("Книга для удаления")
