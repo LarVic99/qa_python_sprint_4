@@ -113,5 +113,4 @@ class TestBooksCollector:
         collector.add_book_in_favorites("Неизвестная книга")
         favorites = collector.get_list_of_favorites_books()
         assert len(favorites) == 0  # Книга НЕ добавляется в избранное, так как её нет в books_genre
-#проверка
 
