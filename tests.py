@@ -105,3 +105,4 @@ class TestBooksCollector:
         collector.add_book_in_favorites("Книга 2")
         favorites = collector.get_list_of_favorites_books()
         assert favorites == ["Книга 1", "Книга 2"]
+        
