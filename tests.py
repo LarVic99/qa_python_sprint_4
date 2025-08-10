@@ -29,19 +29,15 @@ class TestBooksCollector:
         collector.set_book_genre("Книга1", "Фантастика")
         assert collector.get_book_genre("Книга1") == "Фантастика"
 
-        # Попытка установить жанр для неизвестной книги — ничего не меняет
         collector.set_book_genre("Неизвестная книга", "Фантастика")
         assert collector.get_book_genre("Неизвестная книга") is None
 
-        # Попытка изменить жанр уже с установленным жанром — игнорируется
         collector.set_book_genre("Книга1", "Романтика")
         assert collector.get_book_genre("Книга1") == "Фантастика"
 
     def test_get_book_genre_positive_and_negative(self, collector):
         collector.add_new_book("Книга2")
-        # Книга есть, но жанр не установлен — ожидается пустая строка
         assert collector.get_book_genre("Книга2") == ""
-        # Книги нет — None
         assert collector.get_book_genre("Отсутствует") is None
 
     def test_get_books_with_specific_genre_positive_and_empty(self, collector):
@@ -50,10 +46,7 @@ class TestBooksCollector:
         collector.set_book_genre("Книга3", "Фантастика")
         collector.set_book_genre("Книга4", "Комедии")
 
-        books = collector.get_books_with_specific_genre("Фантастика")
-        assert books == ["Книга3"]
-
-        # Жанр без книг
+        assert collector.get_books_with_specific_genre("Фантастика") == ["Книга3"]
         assert collector.get_books_with_specific_genre("Романтика") == []
 
     def test_get_books_genre_returns_dict(self, collector):
@@ -94,7 +87,6 @@ class TestBooksCollector:
         collector.add_new_book("Книга для удаления")
         collector.add_book_in_favorites("Книга для удаления")
         collector.delete_book_from_favorites("Нет такой книги")
-        # Избранное не изменилось
         assert collector.get_list_of_favorites_books() == ["Книга для удаления"]
 
     def test_get_list_of_favorites_books(self, collector):
