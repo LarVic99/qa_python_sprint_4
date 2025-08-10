@@ -79,25 +79,22 @@ class TestBooksCollector:
         assert "Детская книга" in books_for_children
         assert "Ужастик" not in books_for_children
 
-    def test_add_book_in_favorites(self):
+    @pytest.mark.parametrize("book, expected", [
+        ("Книга в избранное", ["Книга в избранное"]),
+        ("Неизвестная книга", []),  # книга не добавится
+    ])
+    def test_add_book_in_favorites(self, book, expected):
         collector = BooksCollector()
-        collector.add_new_book("Книга в избранное")
-        collector.add_book_in_favorites("Книга в избранное")
+        collector.add_new_book(book)
+        collector.add_book_in_favorites(book)
         favorites = collector.get_list_of_favorites_books()
-        assert favorites == ["Книга в избранное"]
+        assert favorites == expected
 
     def test_add_book_in_favorites_duplicate(self, setup_favorites):
         collector = setup_favorites
         collector.add_book_in_favorites("Книга в избранное")  # повторное добавление
         favorites = collector.get_list_of_favorites_books()
         assert favorites == ["Книга в избранное"]
-
-    def test_add_book_in_favorites_not_existing(self):
-        collector = BooksCollector()
-        collector.add_new_book("Книга в избранное")
-        collector.add_book_in_favorites("Неизвестная книга")
-        favorites = collector.get_list_of_favorites_books()
-        assert len(favorites) == 1  # книга не добавилась
 
     def test_delete_book_from_favorites(self, setup_favorites):
         collector = setup_favorites
@@ -117,3 +114,4 @@ class TestBooksCollector:
         collector.add_book_in_favorites("Еще одна книга")
         favorites = collector.get_list_of_favorites_books()
         assert favorites == ["Книга в избранное", "Еще одна книга"]
+
