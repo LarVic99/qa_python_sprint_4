@@ -14,7 +14,7 @@ class TestBooksCollector:
         collector.add_new_book('Что делать, если ваш кот хочет вас убить')
         assert len(collector.get_books_genre()) == 2
 
-    @pytest.mark.parametrize("book_name, expected_count", [
+    @pytest.mark.parametrize("book_name,expected_count", [
         ("A" * 40, 1),         # ровно 40 символов — допускается
         ("B" * 41, 0),         # 41 символ — не добавляется
         ("Valid Book", 1),     # нормальное название
@@ -29,9 +29,11 @@ class TestBooksCollector:
         collector.set_book_genre("Книга1", "Фантастика")
         assert collector.get_book_genre("Книга1") == "Фантастика"
 
+        # Книга отсутствует — жанр не устанавливается
         collector.set_book_genre("Неизвестная книга", "Фантастика")
         assert collector.get_book_genre("Неизвестная книга") is None
 
+        # Жанр вне списка genre — жанр не меняется
         collector.set_book_genre("Книга1", "Романтика")
         assert collector.get_book_genre("Книга1") == "Фантастика"
 
@@ -46,7 +48,9 @@ class TestBooksCollector:
         collector.set_book_genre("Книга3", "Фантастика")
         collector.set_book_genre("Книга4", "Комедии")
 
-        assert collector.get_books_with_specific_genre("Фантастика") == ["Книга3"]
+        books = collector.get_books_with_specific_genre("Фантастика")
+        assert books == ["Книга3"]
+
         assert collector.get_books_with_specific_genre("Романтика") == []
 
     def test_get_books_genre_returns_dict(self, collector):
@@ -69,13 +73,13 @@ class TestBooksCollector:
     def test_add_book_in_favorites_success(self, collector):
         collector.add_new_book("Книга в избранное")
         collector.add_book_in_favorites("Книга в избранное")
-        collector.add_book_in_favorites("Книга в избранное")  # повторное добавление
+        collector.add_book_in_favorites("Книга в избранное")  # повторное добавление не должно дублировать
         favorites = collector.get_list_of_favorites_books()
         assert favorites == ["Книга в избранное"]
 
     def test_add_book_in_favorites_unknown_book(self, collector):
         collector.add_book_in_favorites("Неизвестная книга")
-        assert len(collector.get_list_of_favorites_books()) == 0
+        assert len(collector.get_list_of_favorites_books()) == 0  # не добавилась
 
     def test_delete_book_from_favorites_success(self, collector):
         collector.add_new_book("Книга для удаления")
